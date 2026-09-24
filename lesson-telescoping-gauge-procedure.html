@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telescoping Gauge Procedure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #2a9d8f;
+    --teal-dark: #1a7a6e;
+    --gold: #e9a825;
+    --dark: #1a1a1a;
+    --track: #3a3a3a;
+    --teal-light: #f0faf7;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --border-light: #d0ede8;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    color: var(--dark);
+  }
+  h1, h2, h3 {
+    font-family: 'Oswald', Arial, sans-serif;
+    margin: 0;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 14px 16px 18px 16px;
+  }
+  .lesson-header {
+    background: var(--dark);
+    border-top: 5px solid var(--teal);
+    border-radius: 6px 6px 0 0;
+    padding: 12px 16px;
+  }
+  .lesson-header .kicker {
+    color: var(--teal);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .lesson-header h1 {
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .progress-shell {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    padding: 12px 16px 4px 16px;
+  }
+  .progress-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    background: var(--track);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--gold);
+    height: 6px;
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.25s ease;
+  }
+  .stage {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    padding: 18px 16px 16px 16px;
+    min-height: 300px;
+  }
+  .screen { display: none; }
+  .slide-kicker {
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .slide-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 12px;
+  }
+  .slide-body p {
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin: 0 0 10px 0;
+  }
+  .slide-body ul {
+    margin: 0 0 10px 0;
+    padding-left: 20px;
+  }
+  .slide-body li {
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .callout {
+    background: var(--teal-light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    margin: 10px 0;
+  }
+  .q-text {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    color: var(--dark);
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .opt.correct {
+    background: var(--teal-light);
+    border-left: 4px solid var(--teal);
+    border-color: var(--teal);
+    font-weight: 700;
+    color: var(--teal-dark);
+  }
+  .opt.incorrect {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    font-weight: 700;
+    color: var(--red);
+  }
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    border-left: 4px solid var(--teal);
+    background: var(--teal-light);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .complete-box {
+    background: var(--dark);
+    border-top: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 24px 18px;
+    text-align: center;
+  }
+  .complete-box .check {
+    color: var(--gold);
+    font-size: 30px;
+    margin-bottom: 8px;
+  }
+  .complete-box h2 {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .complete-box p {
+    color: #cfcfcf;
+    font-size: 13.5px;
+    margin: 0;
+  }
+  .nav-row {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: 1px solid var(--border-light);
+    border-radius: 0 0 6px 6px;
+    padding: 12px 16px;
+    display: table;
+    width: 100%;
+  }
+  .nav-cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .nav-cell.right {
+    text-align: right;
+  }
+  button.nav-btn {
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 9px 18px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  #back-btn {
+    background: #ffffff;
+    color: var(--teal-dark);
+    border: 1px solid var(--teal);
+  }
+  #next-btn {
+    background: var(--teal);
+    color: #ffffff;
+  }
+  #next-btn:disabled {
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="lesson-header">
+    <div class="kicker">Micro Lesson</div>
+    <h1>Telescoping Gauge Procedure</h1>
+  </div>
+
+  <div class="progress-shell">
+    <div class="progress-label" id="progress-label">Progress - 0%</div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <div class="stage">
+    <div class="screen" id="screen-0">
+      <div class="slide-kicker">Slide 1 of 3</div>
+      <div class="slide-title">What a Telescoping Gauge Does</div>
+      <div class="slide-body">
+        <p>A telescoping gauge is a T-shaped tool with two spring-loaded plungers that expand outward. It transfers a bore diameter to a size you can then read with an outside micrometer. The gauge itself has no scale.</p>
+        <p>It is typically used for bores under about 2 inches, where a dial bore gauge may not be the right size or a quick single reading is all you need.</p>
+      </div>
+    </div>
+    <div class="screen" id="screen-1">
+      <div class="slide-kicker">Slide 2 of 3</div>
+      <div class="slide-title">Taking the Measurement</div>
+      <div class="slide-body">
+        <ol style="font-size:14.5px; line-height:1.55; padding-left:20px; margin:0 0 10px 0;">
+          <li>Select a telescoping gauge sized for the bore range you're measuring.</li>
+          <li>Compress the plungers and insert the gauge into the bore.</li>
+          <li>Release the plungers so they expand and contact the bore walls.</li>
+          <li>Rock the gauge slightly to find the true diameter, the widest point straight across, perpendicular to the bore wall.</li>
+          <li>Lock the plungers in place with the thumbscrew on the handle.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="screen" id="screen-2">
+      <div class="slide-kicker">Slide 3 of 3</div>
+      <div class="slide-title">Transferring to the Micrometer</div>
+      <div class="slide-body">
+        <p>Once the plungers are locked, carefully remove the gauge from the bore without bumping the plungers out of position.</p>
+        <p>Immediately measure across the locked plungers with an outside micrometer. The number on the micrometer is your bore diameter.</p>
+        <div class="callout">Do this transfer right away. The longer the gauge sits after you lock it, the more chance there is for something to bump it and change the setting before you get a reading.</div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-3">
+      <div class="slide-kicker">Knowledge Check 1 of 3</div>
+      <div class="q-text">What does a telescoping gauge actually measure on its own?</div>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,0)">It reads bore diameter directly off its own scale</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,1)">Nothing directly. It transfers a bore diameter to be read with a separate micrometer</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,2)">Outside diameters like journals and shafts</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,3)">Spring tension</button>
+
+      <div class="feedback" id="feedback-q0"></div>
+    </div>
+    <div class="screen" id="screen-4">
+      <div class="slide-kicker">Knowledge Check 2 of 3</div>
+      <div class="q-text">After you rock the telescoping gauge in the bore to find the true diameter, what's the next step?</div>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,0)">Read the number stamped on the gauge handle</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,1)">Lock the plungers, remove the gauge carefully, and measure across the plungers with a micrometer</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,2)">Throw the gauge away, it's single use</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,3)">Reset it to zero and start over</button>
+
+      <div class="feedback" id="feedback-q1"></div>
+    </div>
+    <div class="screen" id="screen-5">
+      <div class="slide-kicker">Knowledge Check 3 of 3</div>
+      <div class="q-text">Why do you rock the telescoping gauge slightly while it's inside the bore?</div>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,0)">To push it in deeper</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,1)">To find the widest point straight across, which is the true diameter perpendicular to the bore wall</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,2)">To clean debris out of the bore</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,3)">It's an optional step that can be skipped</button>
+
+      <div class="feedback" id="feedback-q2"></div>
+    </div>
+
+    <div class="screen" id="screen-6">
+      <div class="complete-box">
+        <div class="check">&#10003;</div>
+        <h2>Lesson Complete</h2>
+        <p>You have finished this micro lesson. Close this window or return to Canvas to continue.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row" id="nav-row">
+    <div class="nav-cell">
+      <button class="nav-btn" id="back-btn" onclick="backScreen()">Back</button>
+    </div>
+    <div class="nav-cell right">
+      <button class="nav-btn" id="next-btn" onclick="nextScreen()">Next</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var screens = document.getElementsByClassName('screen');
+var current = 0;
+var answered = [false, false, false];
+var qData = {"0": {"correct": 1, "explanation": "Correct. A telescoping gauge has no scale of its own. It expands to match the bore, gets locked, and then you read the actual size off an outside micrometer."}, "1": {"correct": 1, "explanation": "Right. Lock the plungers at the true diameter point, then transfer that size to a micrometer right away for the actual reading."}, "2": {"correct": 1, "explanation": "Correct. Rocking the gauge helps you find the true diameter, the point where the plungers span the bore at a true perpendicular angle rather than a slightly off-angle chord that would read larger."}};
+
+function showScreen(idx) {
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].style.display = (i === idx) ? 'block' : 'none';
+  }
+  current = idx;
+  updateProgress();
+  updateNav();
+  window.scrollTo(0, 0);
+}
+
+function updateProgress() {
+  var pct = Math.round((current / (screens.length - 1)) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').innerHTML = 'Progress - ' + pct + '%';
+}
+
+function updateNav() {
+  var backBtn = document.getElementById('back-btn');
+  var nextBtn = document.getElementById('next-btn');
+  var navRow = document.getElementById('nav-row');
+  if (current === 0) {
+    backBtn.style.visibility = 'hidden';
+  } else {
+    backBtn.style.visibility = 'visible';
+  }
+  if (current === screens.length - 1) {
+    navRow.style.display = 'none';
+  } else {
+    navRow.style.display = 'table';
+    if (current >= 3 && current <= 5 && !answered[current - 3]) {
+      nextBtn.disabled = true;
+      nextBtn.style.opacity = '0.4';
+    } else {
+      nextBtn.disabled = false;
+      nextBtn.style.opacity = '1';
+    }
+  }
+}
+
+function nextScreen() {
+  if (current < screens.length - 1) {
+    showScreen(current + 1);
+  }
+}
+
+function backScreen() {
+  if (current > 0) {
+    showScreen(current - 1);
+  }
+}
+
+function selectAnswer(qIndex, optIndex) {
+  if (answered[qIndex]) return;
+  answered[qIndex] = true;
+  var correctIndex = qData[qIndex].correct;
+  var opts = document.getElementsByClassName('opt-q' + qIndex);
+  for (var i = 0; i < opts.length; i++) {
+    if (i === correctIndex) {
+      opts[i].className = opts[i].className + ' correct';
+    }
+    if (i === optIndex && optIndex !== correctIndex) {
+      opts[i].className = opts[i].className + ' incorrect';
+    }
+  }
+  var fb = document.getElementById('feedback-q' + qIndex);
+  fb.style.display = 'block';
+  fb.innerHTML = qData[qIndex].explanation;
+  updateNav();
+}
+
+showScreen(0);
+</script>
+
+</body>
+</html>

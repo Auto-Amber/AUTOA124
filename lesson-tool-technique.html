@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Technique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #2a9d8f;
+    --teal-dark: #1a7a6e;
+    --gold: #e9a825;
+    --dark: #1a1a1a;
+    --track: #3a3a3a;
+    --teal-light: #f0faf7;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --border-light: #d0ede8;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    color: var(--dark);
+  }
+  h1, h2, h3 {
+    font-family: 'Oswald', Arial, sans-serif;
+    margin: 0;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 14px 16px 18px 16px;
+  }
+  .lesson-header {
+    background: var(--dark);
+    border-top: 5px solid var(--teal);
+    border-radius: 6px 6px 0 0;
+    padding: 12px 16px;
+  }
+  .lesson-header .kicker {
+    color: var(--teal);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .lesson-header h1 {
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .progress-shell {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    padding: 12px 16px 4px 16px;
+  }
+  .progress-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    background: var(--track);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--gold);
+    height: 6px;
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.25s ease;
+  }
+  .stage {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    padding: 18px 16px 16px 16px;
+    min-height: 300px;
+  }
+  .screen { display: none; }
+  .slide-kicker {
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .slide-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 12px;
+  }
+  .slide-body p {
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin: 0 0 10px 0;
+  }
+  .slide-body ul {
+    margin: 0 0 10px 0;
+    padding-left: 20px;
+  }
+  .slide-body li {
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .callout {
+    background: var(--teal-light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    margin: 10px 0;
+  }
+  .q-text {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    color: var(--dark);
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .opt.correct {
+    background: var(--teal-light);
+    border-left: 4px solid var(--teal);
+    border-color: var(--teal);
+    font-weight: 700;
+    color: var(--teal-dark);
+  }
+  .opt.incorrect {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    font-weight: 700;
+    color: var(--red);
+  }
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    border-left: 4px solid var(--teal);
+    background: var(--teal-light);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .complete-box {
+    background: var(--dark);
+    border-top: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 24px 18px;
+    text-align: center;
+  }
+  .complete-box .check {
+    color: var(--gold);
+    font-size: 30px;
+    margin-bottom: 8px;
+  }
+  .complete-box h2 {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .complete-box p {
+    color: #cfcfcf;
+    font-size: 13.5px;
+    margin: 0;
+  }
+  .nav-row {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: 1px solid var(--border-light);
+    border-radius: 0 0 6px 6px;
+    padding: 12px 16px;
+    display: table;
+    width: 100%;
+  }
+  .nav-cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .nav-cell.right {
+    text-align: right;
+  }
+  button.nav-btn {
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 9px 18px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  #back-btn {
+    background: #ffffff;
+    color: var(--teal-dark);
+    border: 1px solid var(--teal);
+  }
+  #next-btn {
+    background: var(--teal);
+    color: #ffffff;
+  }
+  #next-btn:disabled {
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="lesson-header">
+    <div class="kicker">Micro Lesson</div>
+    <h1>Tool Technique</h1>
+  </div>
+
+  <div class="progress-shell">
+    <div class="progress-label" id="progress-label">Progress - 0%</div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <div class="stage">
+    <div class="screen" id="screen-0">
+      <div class="slide-kicker">Slide 1 of 3</div>
+      <div class="slide-title">Two Habits Before Any Reading</div>
+      <div class="slide-body">
+        <p>Before you trust any precision measurement, two habits come first, every single time, not just at the start of the shift:</p>
+        <ul>
+          <li>Zero-check the tool.</li>
+          <li>Make sure the tool's measuring faces and the part are clean.</li>
+        </ul>
+        <p>Skipping either one means you don't actually know if the number you're about to write down is real.</p>
+      </div>
+    </div>
+    <div class="screen" id="screen-1">
+      <div class="slide-kicker">Slide 2 of 3</div>
+      <div class="slide-title">Why Cleanliness Matters</div>
+      <div class="slide-body">
+        <p>A chip of metal, a film of oil, or a bit of grit sitting between a tool's measuring faces and the part adds false thickness to the reading. That extra thickness is invisible unless you're specifically looking for it, and it goes straight into your number.</p>
+        <div class="callout">Wipe both the tool's measuring faces and the part's surface before every measurement, not just the first one of the day.</div>
+      </div>
+    </div>
+    <div class="screen" id="screen-2">
+      <div class="slide-kicker">Slide 3 of 3</div>
+      <div class="slide-title">Why Temperature Matters</div>
+      <div class="slide-body">
+        <p>Metal expands when it warms up. A part fresh off a running engine, or a tool that's been sitting closed in a warm hand for a while, can read slightly different than the same tool and part at room temperature.</p>
+        <p>Let hot parts cool to near room temperature before taking a precision measurement whenever the job allows it, and avoid gripping a tool's frame with bare hands longer than necessary during a critical reading.</p>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-3">
+      <div class="slide-kicker">Knowledge Check 1 of 3</div>
+      <div class="q-text">How often should you zero-check a precision measuring tool?</div>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,0)">Once per semester</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,1)">Once at the start of each shop day only</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,2)">Every time you pick it up to use it</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,3)">Never, factory calibration is permanent</button>
+
+      <div class="feedback" id="feedback-q0"></div>
+    </div>
+    <div class="screen" id="screen-4">
+      <div class="slide-kicker">Knowledge Check 2 of 3</div>
+      <div class="q-text">Why does a film of oil or a metal chip between the measuring faces and the part matter?</div>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,0)">It doesn't affect the reading</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,1)">It adds false thickness and gives an inaccurate reading</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,2)">It only matters on inside diameter tools</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,3)">It actually improves accuracy by filling small gaps</button>
+
+      <div class="feedback" id="feedback-q1"></div>
+    </div>
+    <div class="screen" id="screen-5">
+      <div class="slide-kicker">Knowledge Check 3 of 3</div>
+      <div class="q-text">Why should a hot part be allowed to cool before a precision measurement whenever possible?</div>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,0)">It isn't necessary, temperature doesn't affect metal dimensions</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,1)">Metal expands when warm, so a hot reading can differ from the true room-temperature size</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,2)">It makes the tool easier to clean</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,3)">It only matters for aluminum parts, never steel</button>
+
+      <div class="feedback" id="feedback-q2"></div>
+    </div>
+
+    <div class="screen" id="screen-6">
+      <div class="complete-box">
+        <div class="check">&#10003;</div>
+        <h2>Lesson Complete</h2>
+        <p>You have finished this micro lesson. Close this window or return to Canvas to continue.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row" id="nav-row">
+    <div class="nav-cell">
+      <button class="nav-btn" id="back-btn" onclick="backScreen()">Back</button>
+    </div>
+    <div class="nav-cell right">
+      <button class="nav-btn" id="next-btn" onclick="nextScreen()">Next</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var screens = document.getElementsByClassName('screen');
+var current = 0;
+var answered = [false, false, false];
+var qData = {"0": {"correct": 2, "explanation": "Correct. Zero can shift from a drop, from wear, or from temperature change at any point during the day. Checking it every time you use the tool is the only way to know your reading is real."}, "1": {"correct": 1, "explanation": "Right. Anything sitting between the measuring faces and the part becomes part of what the tool measures, adding thickness that isn't really there on the part itself."}, "2": {"correct": 1, "explanation": "Correct. Thermal expansion is real and measurable. A part measured hot can read larger than it actually is at room temperature, which is the condition most specs are written against."}};
+
+function showScreen(idx) {
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].style.display = (i === idx) ? 'block' : 'none';
+  }
+  current = idx;
+  updateProgress();
+  updateNav();
+  window.scrollTo(0, 0);
+}
+
+function updateProgress() {
+  var pct = Math.round((current / (screens.length - 1)) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').innerHTML = 'Progress - ' + pct + '%';
+}
+
+function updateNav() {
+  var backBtn = document.getElementById('back-btn');
+  var nextBtn = document.getElementById('next-btn');
+  var navRow = document.getElementById('nav-row');
+  if (current === 0) {
+    backBtn.style.visibility = 'hidden';
+  } else {
+    backBtn.style.visibility = 'visible';
+  }
+  if (current === screens.length - 1) {
+    navRow.style.display = 'none';
+  } else {
+    navRow.style.display = 'table';
+    if (current >= 3 && current <= 5 && !answered[current - 3]) {
+      nextBtn.disabled = true;
+      nextBtn.style.opacity = '0.4';
+    } else {
+      nextBtn.disabled = false;
+      nextBtn.style.opacity = '1';
+    }
+  }
+}
+
+function nextScreen() {
+  if (current < screens.length - 1) {
+    showScreen(current + 1);
+  }
+}
+
+function backScreen() {
+  if (current > 0) {
+    showScreen(current - 1);
+  }
+}
+
+function selectAnswer(qIndex, optIndex) {
+  if (answered[qIndex]) return;
+  answered[qIndex] = true;
+  var correctIndex = qData[qIndex].correct;
+  var opts = document.getElementsByClassName('opt-q' + qIndex);
+  for (var i = 0; i < opts.length; i++) {
+    if (i === correctIndex) {
+      opts[i].className = opts[i].className + ' correct';
+    }
+    if (i === optIndex && optIndex !== correctIndex) {
+      opts[i].className = opts[i].className + ' incorrect';
+    }
+  }
+  var fb = document.getElementById('feedback-q' + qIndex);
+  fb.style.display = 'block';
+  fb.innerHTML = qData[qIndex].explanation;
+  updateNav();
+}
+
+showScreen(0);
+</script>
+
+</body>
+</html>
