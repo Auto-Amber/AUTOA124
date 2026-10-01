@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pushrod Camshaft Bearing Location</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #2a9d8f;
+    --teal-dark: #1a7a6e;
+    --gold: #e9a825;
+    --dark: #1a1a1a;
+    --track: #3a3a3a;
+    --teal-light: #f0faf7;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --border-light: #d0ede8;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    color: var(--dark);
+  }
+  h1, h2, h3 {
+    font-family: 'Oswald', Arial, sans-serif;
+    margin: 0;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 14px 16px 18px 16px;
+  }
+  .lesson-header {
+    background: var(--dark);
+    border-top: 5px solid var(--teal);
+    border-radius: 6px 6px 0 0;
+    padding: 12px 16px;
+  }
+  .lesson-header .kicker {
+    color: var(--teal);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .lesson-header h1 {
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .progress-shell {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    padding: 12px 16px 4px 16px;
+  }
+  .progress-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    background: var(--track);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--gold);
+    height: 6px;
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.25s ease;
+  }
+  .stage {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    padding: 18px 16px 16px 16px;
+    min-height: 300px;
+  }
+  .screen { display: none; }
+  .slide-kicker {
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .slide-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 12px;
+  }
+  .slide-body p {
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin: 0 0 10px 0;
+  }
+  .slide-body ul {
+    margin: 0 0 10px 0;
+    padding-left: 20px;
+  }
+  .slide-body li {
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-bottom: 6px;
+  }
+  .callout {
+    background: var(--teal-light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    margin: 10px 0;
+  }
+  .q-text {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+  .opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    color: var(--dark);
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .opt.correct {
+    background: var(--teal-light);
+    border-left: 4px solid var(--teal);
+    border-color: var(--teal);
+    font-weight: 700;
+    color: var(--teal-dark);
+  }
+  .opt.incorrect {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    font-weight: 700;
+    color: var(--red);
+  }
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    border-left: 4px solid var(--teal);
+    background: var(--teal-light);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .complete-box {
+    background: var(--dark);
+    border-top: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 24px 18px;
+    text-align: center;
+  }
+  .complete-box .check {
+    color: var(--gold);
+    font-size: 30px;
+    margin-bottom: 8px;
+  }
+  .complete-box h2 {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+  .complete-box p {
+    color: #cfcfcf;
+    font-size: 13.5px;
+    margin: 0;
+  }
+  .nav-row {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: 1px solid var(--border-light);
+    border-radius: 0 0 6px 6px;
+    padding: 12px 16px;
+    display: table;
+    width: 100%;
+  }
+  .nav-cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .nav-cell.right {
+    text-align: right;
+  }
+  button.nav-btn {
+    font-family: 'Source Sans 3', Arial, sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 9px 18px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  #back-btn {
+    background: #ffffff;
+    color: var(--teal-dark);
+    border: 1px solid var(--teal);
+  }
+  #next-btn {
+    background: var(--teal);
+    color: #ffffff;
+  }
+  #next-btn:disabled {
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="lesson-header">
+    <div class="kicker">Micro Lesson</div>
+    <h1>Pushrod Camshaft Bearing Location</h1>
+  </div>
+
+  <div class="progress-shell">
+    <div class="progress-label" id="progress-label">Progress - 0%</div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <div class="stage">
+    <div class="screen" id="screen-0">
+      <div class="slide-kicker">Slide 1 of 3</div>
+      <div class="slide-title">Where the Cam Lives on a Pushrod Engine</div>
+      <div class="slide-body">
+        <p>On a pushrod (OHV) engine, the camshaft sits down inside the block, not up in the cylinder head. It rides in bearing bores machined directly into the block, usually with separate cam bearing inserts pressed in.</p>
+        <p>This is different from an overhead cam (OHC) engine, where the camshaft rides in the head itself.</p>
+      </div>
+    </div>
+    <div class="screen" id="screen-1">
+      <div class="slide-kicker">Slide 2 of 3</div>
+      <div class="slide-title">Why This Changes Block Service</div>
+      <div class="slide-body">
+        <div class="callout">Because the cam bearings live in the block on a pushrod engine, checking and replacing them is part of block service, not head service.</div>
+        <p>This matters when deciding what work belongs where during a teardown, cam bearing condition gets evaluated right along with the rest of the block's internals.</p>
+      </div>
+    </div>
+    <div class="screen" id="screen-2">
+      <div class="slide-kicker">Slide 3 of 3</div>
+      <div class="slide-title">Alignment Matters as Much as Clearance</div>
+      <div class="slide-body">
+        <p>The cam bearing bores have to line up straight through the full length of the block. Even if each individual bearing's clearance checks out fine, a bore that's out of alignment will bind the camshaft as it turns.</p>
+        <p>Checking bore alignment is a separate step from checking bearing clearance, and both need to pass before the cam goes back in.</p>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-3">
+      <div class="slide-kicker">Knowledge Check 1 of 3</div>
+      <div class="q-text">On a pushrod (OHV) engine, where does the camshaft ride?</div>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,0)">In bearings machined into the cylinder head</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,1)">In bearing bores machined into the block</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,2)">On top of the valve covers</button>
+        <button type="button" class="opt opt-q0" onclick="selectAnswer(0,3)">In the timing cover only</button>
+
+      <div class="feedback" id="feedback-q0"></div>
+    </div>
+    <div class="screen" id="screen-4">
+      <div class="slide-kicker">Knowledge Check 2 of 3</div>
+      <div class="q-text">Because the camshaft rides in the block on a pushrod engine, where does checking cam bearing condition belong?</div>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,0)">Cylinder head service</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,1)">Block service</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,2)">It isn't checked on pushrod engines</button>
+        <button type="button" class="opt opt-q1" onclick="selectAnswer(1,3)">Transmission service</button>
+
+      <div class="feedback" id="feedback-q1"></div>
+    </div>
+    <div class="screen" id="screen-5">
+      <div class="slide-kicker">Knowledge Check 3 of 3</div>
+      <div class="q-text">Why does cam bore alignment matter separately from individual bearing clearance?</div>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,0)">It doesn't, clearance is the only thing that matters</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,1)">A bore that's out of straight alignment can bind the camshaft even if each bearing's clearance is correct</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,2)">Alignment only matters on OHC engines</button>
+        <button type="button" class="opt opt-q2" onclick="selectAnswer(2,3)">Alignment is checked after the engine is fully assembled and running</button>
+
+      <div class="feedback" id="feedback-q2"></div>
+    </div>
+
+    <div class="screen" id="screen-6">
+      <div class="complete-box">
+        <div class="check">&#10003;</div>
+        <h2>Lesson Complete</h2>
+        <p>You have finished this micro lesson. Close this window or return to Canvas to continue.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row" id="nav-row">
+    <div class="nav-cell">
+      <button class="nav-btn" id="back-btn" onclick="backScreen()">Back</button>
+    </div>
+    <div class="nav-cell right">
+      <button class="nav-btn" id="next-btn" onclick="nextScreen()">Next</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var screens = document.getElementsByClassName('screen');
+var current = 0;
+var answered = [false, false, false];
+var qData = {"0": {"correct": 1, "explanation": "Correct. Unlike an OHC engine, a pushrod engine's camshaft sits inside the block and rides in bearing bores there."}, "1": {"correct": 1, "explanation": "Right. Since the cam bearings are in the block, evaluating them is part of block service on a pushrod engine."}, "2": {"correct": 1, "explanation": "Correct. Even with correct clearance at each bearing, a misaligned bore will bind the cam as it turns, so alignment is checked as its own step."}};
+
+function showScreen(idx) {
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].style.display = (i === idx) ? 'block' : 'none';
+  }
+  current = idx;
+  updateProgress();
+  updateNav();
+  window.scrollTo(0, 0);
+}
+
+function updateProgress() {
+  var pct = Math.round((current / (screens.length - 1)) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').innerHTML = 'Progress - ' + pct + '%';
+}
+
+function updateNav() {
+  var backBtn = document.getElementById('back-btn');
+  var nextBtn = document.getElementById('next-btn');
+  var navRow = document.getElementById('nav-row');
+  if (current === 0) {
+    backBtn.style.visibility = 'hidden';
+  } else {
+    backBtn.style.visibility = 'visible';
+  }
+  if (current === screens.length - 1) {
+    navRow.style.display = 'none';
+  } else {
+    navRow.style.display = 'table';
+    if (current >= 3 && current <= 5 && !answered[current - 3]) {
+      nextBtn.disabled = true;
+      nextBtn.style.opacity = '0.4';
+    } else {
+      nextBtn.disabled = false;
+      nextBtn.style.opacity = '1';
+    }
+  }
+}
+
+function nextScreen() {
+  if (current < screens.length - 1) {
+    showScreen(current + 1);
+  }
+}
+
+function backScreen() {
+  if (current > 0) {
+    showScreen(current - 1);
+  }
+}
+
+function selectAnswer(qIndex, optIndex) {
+  if (answered[qIndex]) return;
+  answered[qIndex] = true;
+  var correctIndex = qData[qIndex].correct;
+  var opts = document.getElementsByClassName('opt-q' + qIndex);
+  for (var i = 0; i < opts.length; i++) {
+    if (i === correctIndex) {
+      opts[i].className = opts[i].className + ' correct';
+    }
+    if (i === optIndex && optIndex !== correctIndex) {
+      opts[i].className = opts[i].className + ' incorrect';
+    }
+  }
+  var fb = document.getElementById('feedback-q' + qIndex);
+  fb.style.display = 'block';
+  fb.innerHTML = qData[qIndex].explanation;
+  updateNav();
+}
+
+showScreen(0);
+</script>
+
+</body>
+</html>
